@@ -75,7 +75,10 @@ export default function VerifyCertificatePage() {
       return;
     }
 
-    const foundCert: Certificate | null = data;
+    const foundCert: Certificate | null = data ? {
+      ...data,
+      certifications: Array.isArray(data.certifications) ? data.certifications[0] : data.certifications
+    } : null;
 
     if (foundCert) {
       setStatus("valid");
