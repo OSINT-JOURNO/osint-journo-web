@@ -1,0 +1,203 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Typography */
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Color palette extensions */
+  --color-lime-400: #a3e635;
+  --color-lime-500: #84cc16;
+  --color-lime-950: #1a2e05;
+
+  --color-zinc-850: #1f1f22;
+  --color-zinc-900: #18181b;
+  --color-zinc-950: #09090b;
+
+  --color-accent: #a3e635;
+
+  /* Backgrounds */
+  --background-image-grid-dark:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+
+  /* Animations */
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+
+  @keyframes cursor {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  @keyframes scanline {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
+
+  --animate-ticker: ticker 30s linear infinite;
+  --animate-cursor: cursor 1s step-end infinite;
+  --animate-scanline: scanline 8s linear infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a3e635;
+}
+
+.selection-lime ::selection {
+  background-color: #a3e635;
+  color: #000000;
+}
+
+/* CRT Effect Overlay */
+.crt-overlay {
+  background: radial-gradient(circle, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.4) 100%);
+  pointer-events: none;
+}
+
+.scanline-bar {
+  background: linear-gradient(to bottom, transparent, rgba(163, 230, 53, 0.05), transparent);
+  height: 100px;
+  width: 100%;
+  position: absolute;
+  pointer-events: none;
+  z-index: 10;
+}
+
+
+/* ===== Validation page specific styles (from validation_page_for_certs.html) ===== */
+
+/* Animated Background System */
+.bg-grid-animate {
+  background-size: 50px 50px;
+  background-image:
+    linear-gradient(to right, rgba(39, 39, 42, 0.5) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(39, 39, 42, 0.5) 1px, transparent 1px);
+  mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
+  animation: gridMove 40s linear infinite;
+}
+
+@keyframes gridMove {
+  0% {
+    transform: perspective(500px) rotateX(10deg) translateY(0);
+  }
+  100% {
+    transform: perspective(500px) rotateX(10deg) translateY(50px);
+  }
+}
+
+.scanline-overlay {
+  background: linear-gradient(to bottom, transparent, rgba(163, 230, 53, 0.05), transparent);
+  background-size: 100% 8px;
+  animation: scan 8s linear infinite;
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* Blinking Cursor for Inputs */
+.cursor-blink::after {
+  content: "|";
+  animation: blink 1s step-end infinite;
+  color: #a3e635;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Corner brackets */
+.corner-brackets {
+  position: relative;
+}
+
+.corner-brackets::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-top: 1px solid #3f3f46;
+  border-left: 1px solid #3f3f46;
+  transition: all 0.3s ease;
+}
+
+.corner-brackets::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 6px;
+  height: 6px;
+  border-bottom: 1px solid #3f3f46;
+  border-right: 1px solid #3f3f46;
+  transition: all 0.3s ease;
+}
+
+.group:hover .corner-brackets::before,
+.group:focus-within .corner-brackets::before {
+  border-color: #a3e635;
+  width: 100%;
+  height: 100%;
+}
+
+.group:hover .corner-brackets::after,
+.group:focus-within .corner-brackets::after {
+  border-color: #a3e635;
+  width: 100%;
+  height: 100%;
+}
+
+/* CRT Flicker effect for specific elements */
+.crt-flicker {
+  animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 0.95;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.98;
+  }
+}
+
+/* Slow pulse animation to match original template */
+.animate-pulse-slow {
+  animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
