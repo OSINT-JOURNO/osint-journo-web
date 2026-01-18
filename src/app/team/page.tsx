@@ -24,7 +24,7 @@ export default function TeamPage() {
       briefUrl: "https://www.linkedin.com/in/vyvivekyadav04/",
     },
     {
-      name: "Dipti Yadv",
+      name: "Dipti Yadav",
       codename: "DIPTI_Y",
       role: "CIO",
       focus: "Tracing people, money, and influence through open data",
