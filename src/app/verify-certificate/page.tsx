@@ -8,9 +8,15 @@ interface Certificate {
   recipient: string;
   created_at: string;
   expiry_date?: string | null;
-  certifications: {
+  // Joined via FK issued_certificates.cert_id -> certificates.id
+  certificate: {
     name: string;
-  };
+  } | null;
+}
+
+// Shape we actually get back from Supabase before normalizing
+interface SupabaseIssuedCertificateRow extends Omit<Certificate, "certificate"> {
+  certificate: { name: string } | { name: string }[] | null;
 }
 
 type VerificationStatus = "idle" | "loading" | "valid" | "invalid";
@@ -64,21 +70,32 @@ export default function VerifyCertificatePage() {
     // Query Supabase for the certificate
     const { data, error } = await supabase
       .from("issued_certificates")
-      .select("hash, recipient, created_at, expiry_date, certifications(name)")
+      .select(
+        "hash, recipient, created_at, expiry_date, certificate:certificates(name)"
+      )
       .eq("hash", cleanHash)
       .single();
+
+    console.log("[verify-certificate] Supabase result", data, error);
 
     if (error && error.code !== "PGRST116") {
       // PGRST116 = no rows returned, which is expected for invalid hashes
       addLog(">> ERROR: Database query failed");
       setStatus("invalid");
+      console.log(error);
       return;
     }
 
-    const foundCert: Certificate | null = data ? {
-      ...data,
-      certifications: Array.isArray(data.certifications) ? data.certifications[0] : data.certifications
-    } : null;
+    const raw = (data as SupabaseIssuedCertificateRow | null) ?? null;
+
+    const foundCert: Certificate | null = raw
+      ? {
+          ...raw,
+          certificate: Array.isArray(raw.certificate)
+            ? raw.certificate[0] ?? null
+            : raw.certificate,
+        }
+      : null;
 
     if (foundCert) {
       setStatus("valid");
@@ -192,7 +209,9 @@ export default function VerifyCertificatePage() {
                   <label className="block text-[10px] font-mono text-zinc-500 uppercase tracking-wider mb-1">
                     Certificate Name
                   </label>
-                  <p className="text-white font-medium">{verifiedCert.certifications.name}</p>
+                  <p className="text-white font-medium">
+                    {verifiedCert.certificate?.name ?? "Unknown certificate"}
+                  </p>
                 </div>
                 <div>
                   <label className="block text-[10px] font-mono text-zinc-500 uppercase tracking-wider mb-1">
