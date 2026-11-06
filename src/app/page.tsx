@@ -1078,7 +1078,7 @@ export default function Home() {
 
           <div className="border-t border-zinc-900 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-[10px] font-mono text-zinc-600">
-              © 2024 OSINT JOURNO. POWERED BY <a href="https://shallvhack.com" target="_blank" rel="noopener noreferrer" className="text-sky-400 font-semibold hover:text-sky-300 transition-colors">ShallVhack</a>.
+              © 2024 OSINT JOURNO.
             </p>
             <div className="flex items-center gap-2 text-[10px] font-mono text-zinc-600">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
